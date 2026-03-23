@@ -132,8 +132,8 @@ function BuiltinPlayer({ type }: { type: string }) {
 
   const url =
     type === "tv"
-      ? `http://zxcstream.xyz/embed/tv/${id}/${season}/${episode}`
-      : `http://zxcstream.xyz/embed/movie/${id}`;
+      ? `/embed/tv/${id}/${season}/${episode}`
+      : `/embed/movie/${id}`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(url);
