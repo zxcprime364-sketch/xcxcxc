@@ -6,7 +6,10 @@ const ALLOWED_REFERERS = [
   "https://zxcprime.site/",
 ];
 
-export const ALLOWED_ORIGINS = ["https://zxcprime.site"];
+export const ALLOWED_ORIGINS = [
+  "http://localhost:3000",
+  "https://zxcprime.site",
+];
 export function isValidReferer(referer: string): boolean {
   return ALLOWED_REFERERS.some((allowed) => referer.includes(allowed));
 }

@@ -130,8 +130,8 @@ export default function MainControls({
         </div> */}
         <div></div>
       </div>
-      <div className="w-full lg:px-6 px-2 lg:py-6 py-3 pointer-events-auto space-y-3">
-        <div className="lg:p-4 p-2">
+      <div className="w-full lg:px-6 px-2 lg:py-6 py-3  space-y-3">
+        <div className="lg:p-4 p-2  pointer-events-none">
           <span className="flex lg:gap-3 gap-1.5 items-center">
             <div
               className="lg:w-1 w-0.5  lg:h-5 h-3 rounded-full"
@@ -148,155 +148,157 @@ export default function MainControls({
             <p>2024</p> |<p>Animation</p>|<p>PG</p>
           </div>
         </div>
-        <div className="group  lg:h-4 h-2  lg:px-3 px-2 flex justify-center items-center">
-          <div
-            className="relative w-full"
-            ref={sliderRef}
-            onMouseMove={handleSliderHover}
-            onMouseLeave={clearHover}
-          >
-            {/* Buffered bar */}
-            <div className="absolute inset-0 rounded pointer-events-none">
-              <div
-                className="h-full bg-muted-foreground/50 rounded"
-                style={{
-                  width: state.duration
-                    ? `${(state.buffered / state.duration) * 100}%`
-                    : "0%",
-                }}
-              />
-            </div>
-
-            {hoverTime !== null && (
-              <div
-                className="absolute -top-8 px-2 py-1  text-sm rounded bg-background/70 backdrop-blur-2xl text-foreground pointer-events-none z-40"
-                style={{
-                  left: hoverX,
-                  transform: "translateX(-50%)",
-                }}
-              >
-                {formatTime(hoverTime)}
-              </div>
-            )}
-            <Slider
-              value={[state.currentTime]}
-              max={state.duration || 1}
-              step={0.1}
-              onValueChange={(value) => controls.handleSeekChange(value)}
-              onValueCommit={(value) => controls.handleSeekCommit(value)}
-              className="relative z-10"
-              // disabled={!state.canPlay}
-              color={color}
-            />
-          </div>
-        </div>
-        <div className="flex justify-between items-center w-full">
-          <div className="flex items-center lg:gap-3 gap-2">
-            <button
-              onClick={controls.togglePlay}
-              // disabled={!state.canPlay}
-              className="text-white/80 hover:text-white cursor-pointer"
+        <div className="space-y-3 pointer-events-auto ">
+          <div className="group  lg:h-4 h-2  lg:px-3 px-2 flex justify-center items-center ">
+            <div
+              className="relative w-full"
+              ref={sliderRef}
+              onMouseMove={handleSliderHover}
+              onMouseLeave={clearHover}
             >
-              {state.playing ? (
-                <motion.div
-                  key="pause"
-                  initial={{ opacity: 0, scale: 1.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.5 }}
-                  transition={{ duration: 0.1 }}
-                >
-                  <PauseIcon className="lg:size-13 md:size-10 size-8 " />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="play"
-                  initial={{ opacity: 0, scale: 1.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.5 }}
-                  transition={{ duration: 0.1 }}
-                >
-                  <PlayIcon className=" lg:size-13 md:size-10 size-8" />
-                </motion.div>
-              )}
-            </button>
+              {/* Buffered bar */}
+              <div className="absolute inset-0 rounded pointer-events-none">
+                <div
+                  className="h-full bg-muted-foreground/50 rounded"
+                  style={{
+                    width: state.duration
+                      ? `${(state.buffered / state.duration) * 100}%`
+                      : "0%",
+                  }}
+                />
+              </div>
 
-            <div className="flex items-center gap-2 group">
-              <button
-                onClick={controls.toggleMute}
-                className="text-white/80 hover:text-white cursor-pointer"
-              >
-                {state.muted || state.volume === 0 ? (
-                  <VolumeOffIcon className="lg:size-13 md:size-10 size-8" />
-                ) : (
-                  <VolumeOnIcon className="lg:size-13 md:size-10 size-8" />
-                )}
-              </button>
+              {hoverTime !== null && (
+                <div
+                  className="absolute -top-8 px-2 py-1  text-sm rounded bg-background/70 backdrop-blur-2xl text-foreground pointer-events-none z-40"
+                  style={{
+                    left: hoverX,
+                    transform: "translateX(-50%)",
+                  }}
+                >
+                  {formatTime(hoverTime)}
+                </div>
+              )}
               <Slider
-                value={[state.muted ? 0 : state.volume]}
-                min={0}
-                max={1}
-                step={0.02}
-                onValueChange={([v]) => controls.setVolume(v)}
-                className=" w-0 group-hover:w-24 transition-[width] duration-200 ease-in-out"
+                value={[state.currentTime]}
+                max={state.duration || 1}
+                step={0.1}
+                onValueChange={(value) => controls.handleSeekChange(value)}
+                onValueCommit={(value) => controls.handleSeekCommit(value)}
+                className="relative z-10"
+                // disabled={!state.canPlay}
                 color={color}
               />
             </div>
-            <div className="flex lg:gap-2 gap-1 items-center lg:ml-2 lg:text-base text-sm">
-              <span>{formatTime(state.currentTime)}</span>/
-              <span>{formatTime(state.duration)}</span>
-            </div>
           </div>
+          <div className="flex justify-between items-center w-full">
+            <div className="flex items-center lg:gap-3 gap-2">
+              <button
+                onClick={controls.togglePlay}
+                // disabled={!state.canPlay}
+                className="text-white/80 hover:text-white cursor-pointer"
+              >
+                {state.playing ? (
+                  <motion.div
+                    key="pause"
+                    initial={{ opacity: 0, scale: 1.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.5 }}
+                    transition={{ duration: 0.1 }}
+                  >
+                    <PauseIcon className="lg:size-13 md:size-10 size-8 " />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="play"
+                    initial={{ opacity: 0, scale: 1.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.5 }}
+                    transition={{ duration: 0.1 }}
+                  >
+                    <PlayIcon className=" lg:size-13 md:size-10 size-8" />
+                  </motion.div>
+                )}
+              </button>
 
-          <div className="flex items-center lg:gap-3 gap-2">
-            <Settings
-              mergeSubtitles={mergeSubtitles}
-              quality={quality}
-              audioTracks={audioTracks}
-              //
-              onPip={onPip}
-              //
-              imdbId={imdbId}
-              season={season}
-              episode={episode}
-              media_type={media_type}
-              //
-              resetTimer={resetTimer}
-              lockTimer={lockTimer}
-              source={source}
-            />
-            {media_type === "tv" && (
-              <Episodes
-                tmdbId={tmdbId}
+              <div className="flex items-center gap-2 group">
+                <button
+                  onClick={controls.toggleMute}
+                  className="text-white/80 hover:text-white cursor-pointer"
+                >
+                  {state.muted || state.volume === 0 ? (
+                    <VolumeOffIcon className="lg:size-13 md:size-10 size-8" />
+                  ) : (
+                    <VolumeOnIcon className="lg:size-13 md:size-10 size-8" />
+                  )}
+                </button>
+                <Slider
+                  value={[state.muted ? 0 : state.volume]}
+                  min={0}
+                  max={1}
+                  step={0.02}
+                  onValueChange={([v]) => controls.setVolume(v)}
+                  className=" w-0 group-hover:w-24 transition-[width] duration-200 ease-in-out"
+                  color={color}
+                />
+              </div>
+              <div className="flex lg:gap-2 gap-1 items-center lg:ml-2 lg:text-base text-sm">
+                <span>{formatTime(state.currentTime)}</span>/
+                <span>{formatTime(state.duration)}</span>
+              </div>
+            </div>
+
+            <div className="flex items-center lg:gap-3 gap-2">
+              <Settings
+                mergeSubtitles={mergeSubtitles}
+                quality={quality}
+                audioTracks={audioTracks}
+                //
+                onPip={onPip}
+                //
+                imdbId={imdbId}
                 season={season}
                 episode={episode}
-                lockTimer={lockTimer}
+                media_type={media_type}
+                //
                 resetTimer={resetTimer}
-                totalSeasons={totalSeasons}
+                lockTimer={lockTimer}
+                source={source}
               />
-            )}
-            <button
-              className="text-white/80 hover:text-white cursor-pointer"
-              onClick={() => setCcToggle((prev) => !prev)}
-            >
-              {cCToggle ? (
-                <CcOnIcon className="lg:size-13 md:size-10 size-8" />
-              ) : (
-                <CcOffIcon className="lg:size-13 md:size-10 size-8" />
+              {media_type === "tv" && (
+                <Episodes
+                  tmdbId={tmdbId}
+                  season={season}
+                  episode={episode}
+                  lockTimer={lockTimer}
+                  resetTimer={resetTimer}
+                  totalSeasons={totalSeasons}
+                />
               )}
-            </button>
-            {/* <button className="text-white/80 hover:text-white cursor-pointer">
+              <button
+                className="text-white/80 hover:text-white cursor-pointer"
+                onClick={() => setCcToggle((prev) => !prev)}
+              >
+                {cCToggle ? (
+                  <CcOnIcon className="lg:size-13 md:size-10 size-8" />
+                ) : (
+                  <CcOffIcon className="lg:size-13 md:size-10 size-8" />
+                )}
+              </button>
+              {/* <button className="text-white/80 hover:text-white cursor-pointer">
               <DownloadIcon className="size-12.5" />
             </button> */}
-            <button
-              onClick={controls.toggleFullscreen}
-              className="cursor-pointer text-white/80 hover:text-white"
-            >
-              {state.fullscreen ? (
-                <MinimizeIcon className="lg:size-13 md:size-10 size-8" />
-              ) : (
-                <MaximizeIcon className="lg:size-13 md:size-10 size-8" />
-              )}
-            </button>
+              <button
+                onClick={controls.toggleFullscreen}
+                className="cursor-pointer text-white/80 hover:text-white"
+              >
+                {state.fullscreen ? (
+                  <MinimizeIcon className="lg:size-13 md:size-10 size-8" />
+                ) : (
+                  <MaximizeIcon className="lg:size-13 md:size-10 size-8" />
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </div>
