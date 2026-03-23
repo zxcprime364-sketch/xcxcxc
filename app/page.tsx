@@ -130,13 +130,15 @@ function BuiltinPlayer({ type }: { type: string }) {
   const [iframeKey, setIframeKey] = useState(0);
   const [copied, setCopied] = useState(false);
 
-  const url =
+  const playerPath =
     type === "tv"
       ? `/embed/tv/${id}/${season}/${episode}`
       : `/embed/movie/${id}`;
 
+  const fullUrl = `https://zxcstream.xyz${playerPath}`;
+
   const handleCopy = () => {
-    navigator.clipboard.writeText(url);
+    navigator.clipboard.writeText(fullUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -156,13 +158,13 @@ function BuiltinPlayer({ type }: { type: string }) {
           episode={episode}
           setEpisode={setEpisode}
         />
-        <CopyBar url={url} onCopy={handleCopy} copied={copied} />
+        <CopyBar url={fullUrl} onCopy={handleCopy} copied={copied} />
       </div>
       <div className="w-full aspect-video rounded-xl overflow-hidden shadow-2xl shadow-black/60">
         <iframe
           key={iframeKey}
           className="h-full w-full"
-          src={url}
+          src={playerPath}
           allowFullScreen
         />
       </div>
