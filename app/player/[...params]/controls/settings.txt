@@ -1,0 +1,144 @@
+"use client";
+import { SettingsIcon } from "@/components/icons/settings";
+import { useState, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Gauge,
+  Subtitles,
+  Timer,
+  ListVideo,
+  ChevronRight,
+  ScreenShare,
+  Settings2,
+  AudioLines,
+  Repeat,
+  SkipForward,
+  Moon,
+  FlipHorizontal,
+  PictureInPicture,
+  ALargeSmall,
+  Clock,
+} from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
+const groups = [
+  {
+    label: "Video & Audio",
+    items: [
+      { label: "Quality", value: "Auto", Icon: Gauge },
+      { label: "Aspect Ratio", value: "16:9", Icon: ScreenShare },
+      { label: "Mirror", value: "Off", Icon: FlipHorizontal },
+      { label: "Picture in picture", value: null, Icon: PictureInPicture },
+      { label: "Audio track", value: "English", Icon: AudioLines },
+      { label: "Audio boost", value: "Off", Icon: AudioLines },
+    ],
+  },
+  {
+    label: "Subtitles",
+    items: [
+      { label: "Subtitles", value: "English", Icon: Subtitles },
+      { label: "Dual subtitles", value: "Off", Icon: Subtitles },
+      { label: "Font size", value: "Medium", Icon: ALargeSmall },
+      { label: "Sync offset", value: "0.0s", Icon: Clock },
+      { label: "Subtitle settings", value: null, Icon: Settings2 },
+    ],
+  },
+  {
+    label: "Playback",
+    items: [
+      { label: "Playback speed", value: "1×", Icon: Timer },
+      { label: "Autoplay", value: "On", Icon: ListVideo },
+      { label: "Skip intro", value: "On", Icon: SkipForward },
+      { label: "Skip recap", value: "On", Icon: SkipForward },
+      { label: "Loop", value: "Off", Icon: Repeat },
+      { label: "Sleep timer", value: "Off", Icon: Moon },
+    ],
+  },
+];
+
+export default function Settings() {
+  const [open, setOpen] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  return (
+    <div className="relative">
+      <motion.button
+        ref={buttonRef}
+        onClick={() => setOpen((prev) => !prev)}
+        animate={{ rotate: open ? 90 : 0 }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="relative z-20"
+      >
+        <SettingsIcon className="size-12.5" />
+      </motion.button>
+
+      <AnimatePresence>
+        {open && (
+          <>
+            <motion.div
+              className="fixed inset-0 z-10"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setOpen(false)}
+            />
+
+            <motion.div
+              className="absolute right-0 bottom-full mb-3 z-20 w-xs bg-neutral-900 rounded-md shadow-xl overflow-hidden pl-2 pr-0.5"
+              initial={{ opacity: 0, scale: 0.95, y: -6 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -6 }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+            >
+              <div className="px-3 pb-3 pt-3 border-b border-neutral-800">
+                <p className="text-muted-foreground text-sm font-medium uppercase tracking-wider">
+                  Settings
+                </p>
+              </div>
+
+              <ScrollArea className="h-[60vh] pr-3">
+                <div className="space-y-1 pt-1">
+                  {groups.map(({ label, items }, i) => (
+                    <div key={label}>
+                      {i > 0 && <div className="h-px bg-neutral-800 my-1" />}
+                      <p className="px-3 pt-2 pb-1 text-xs text-neutral-600 uppercase tracking-wider">
+                        {label}
+                      </p>
+                      {items.map(({ label, value, Icon }) => (
+                        <button
+                          key={label}
+                          className="flex items-center justify-between w-full px-2 py-3 gap-3 hover:bg-neutral-800 transition-colors rounded-sm"
+                        >
+                          <div className="flex items-center gap-3">
+                            <Icon
+                              size={18}
+                              className="text-neutral-400 shrink-0"
+                            />
+                            <span className="text-neutral-300 text-base">
+                              {label}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            {value !== null && (
+                              <span className="text-neutral-500 text-base">
+                                {value}
+                              </span>
+                            )}
+                            <ChevronRight
+                              size={16}
+                              className="text-neutral-600"
+                            />
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
