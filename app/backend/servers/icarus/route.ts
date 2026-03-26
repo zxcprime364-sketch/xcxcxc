@@ -37,13 +37,13 @@ export async function GET(req: NextRequest) {
     }
 
     // block direct /api access
-  const referer = req.headers.get("referer") || "";
-  if (!isValidReferer(referer)) {
-    return NextResponse.json(
-      { success: false, error: "Forbidden" },
-      { status: 403 },
-    );
-  }
+    const referer = req.headers.get("referer") || "";
+    if (!isValidReferer(referer)) {
+      return NextResponse.json(
+        { success: false, error: "Forbidden" },
+        { status: 403 },
+      );
+    }
     // -------- MovieBox Logic --------
     const randomIP =
       africanIPs[Math.floor(Math.random() * africanIPs.length)].ip;
@@ -118,7 +118,6 @@ export async function GET(req: NextRequest) {
     const detailJson = await detailRes.json();
     const info = detailJson?.data?.data || detailJson?.data || detailJson;
     const detailPath = info?.subject?.detailPath || "";
-
     // Download sources
     const params = new URLSearchParams({ subjectId });
     if (mediaType === "tv") {
@@ -138,6 +137,7 @@ export async function GET(req: NextRequest) {
     );
 
     const sourcesJson = await sourcesRes.json();
+    console.log("sourcesJson", sourcesJson);
     const sources = sourcesJson?.data?.data || sourcesJson?.data || sourcesJson;
     const downloads = sources?.downloads || [];
     if (!downloads.length)
@@ -209,25 +209,26 @@ export async function GET(req: NextRequest) {
     );
   }
 }
-const africanIPs = [
-  { ip: "41.90.65.134" },
-  { ip: "41.204.187.92" },
-  { ip: "41.215.122.41" },
-  { ip: "102.89.23.176" },
-  { ip: "102.134.77.58" },
-  { ip: "197.210.54.119" },
-  { ip: "197.211.96.44" },
-  { ip: "105.5.88.201" },
-  { ip: "105.14.201.73" },
-  { ip: "196.33.214.88" },
-  { ip: "196.25.1.142" },
-  { ip: "154.160.44.93" },
-  { ip: "154.160.120.18" },
-  { ip: "41.78.64.55" },
-  { ip: "41.222.188.91" },
-  { ip: "105.158.32.177" },
-  { ip: "197.230.145.66" },
-];
+const africanIPs = generateAfricanIPs(17);
+// const africanIPs = [
+//   { ip: "41.75.203.118" },
+//   { ip: "41.216.89.67" },
+//   { ip: "102.176.54.203" },
+//   { ip: "102.38.91.144" },
+//   { ip: "197.159.33.201" },
+//   { ip: "197.248.120.77" },
+//   { ip: "105.112.67.219" },
+//   { ip: "105.245.18.93" },
+//   { ip: "196.46.128.55" },
+//   { ip: "196.223.77.134" },
+//   { ip: "154.118.92.201" },
+//   { ip: "154.73.210.66" },
+//   { ip: "41.139.176.88" },
+//   { ip: "41.190.45.132" },
+//   { ip: "105.92.144.211" },
+//   { ip: "197.221.63.98" },
+//   { ip: "102.164.12.77" },
+// ];
 export async function getWorkingProxy(url: string, proxies: string[]) {
   for (const proxy of proxies) {
     try {
@@ -246,4 +247,13 @@ export async function getWorkingProxy(url: string, proxies: string[]) {
     } catch (e) {}
   }
   return null;
+}
+function generateAfricanIPs(count = 20) {
+  const prefixes = [41, 102, 105, 154, 196, 197];
+
+  const rand = () => Math.floor(Math.random() * 254) + 1;
+
+  return Array.from({ length: count }, () => ({
+    ip: `${prefixes[Math.floor(Math.random() * prefixes.length)]}.${rand()}.${rand()}.${rand()}`,
+  }));
 }
