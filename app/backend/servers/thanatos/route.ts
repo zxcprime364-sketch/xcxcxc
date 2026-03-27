@@ -53,8 +53,20 @@ export async function GET(req: NextRequest) {
 
     const pathLink = `https://api.videasy.net/myflixerzupcloud/sources-with-title?${qs}`;
 
+    // const pathLinkResponse = await fetchWithTimeout(
+    //   `https://orange-poetry-e481.jindaedalus2.workers.dev/?url=${encodeURIComponent(pathLink)}`,
+    //   {
+    //     headers: {
+    //       "User-Agent":
+    //         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    //       Referer: "https://videasy.net/",
+    //     },
+    //   },
+    //   5000,
+    // );
+
     const pathLinkResponse = await fetchWithTimeout(
-      `https://orange-poetry-e481.jindaedalus2.workers.dev/?url=${encodeURIComponent(pathLink)}`,
+      pathLink,
       {
         headers: {
           "User-Agent":
