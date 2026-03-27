@@ -352,7 +352,7 @@ export default function Player() {
       </div>
 
       <AnimatePresence>
-        {!state.canPlay && (
+        {!state.canPlay && metadata?.backdrop_path && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
